@@ -112,9 +112,9 @@ public class Menu {
 	
 	public static void sobre() {
 		System.out.println("\n*********************************************************");
-		System.out.println("Projeto Desenvolvido por: ");
-		System.out.println("Bianca Akemi - beancaakemi@gmail.com");
-		System.out.println("https://github.com/BiaAkemi");
+		System.out.println("Projeto Desenvolvido por:Rafael Cabral ");
+		System.out.println("Rafael Cabral - rafaenc22@gmail.com");
+		System.out.println("https://github.com/Raafa22");
 		System.out.println("*********************************************************");
 	}
 }
