@@ -122,7 +122,11 @@ public class Menu {
     	public static void sobre() {
 		System.out.println("\n*********************************************************");
 		System.out.println("Projeto Desenvolvido por:Rafael Cabral ");
+<<<<<<< HEAD
 		System.out.println("Rafael Cabral - rafaelnc22@gmail.com");
+=======
+		System.out.println("Rafael Cabral - rafaenc22@gmail.com");
+>>>>>>> b70b7ae693cc8f12a1b90d22c8cd727ced1b866b
 		System.out.println("https://github.com/Raafa22");
 		System.out.println("*********************************************************");
 	}
