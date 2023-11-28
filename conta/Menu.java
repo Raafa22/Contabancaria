@@ -5,11 +5,9 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import conta.controller.ContaController;
-import conta.model.Conta;
-import conta.util.Cores;
-import conta.model.Conta;
 import conta.model.ContaCorrente;
 import conta.model.ContaPoupanca;
+import conta.util.Cores;
 
 public class Menu {
 
@@ -19,13 +17,13 @@ public class Menu {
 		
 		Scanner leia = new Scanner(System.in);
 		
-		int op, numero, agencia, tipo, aniversario;
+		int op, numero, agencia, tipo, aniversario, numeroDestino;
 		String titular;
-		float saldo, limite;
+		float saldo, limite, valor;
 		
 		System.out.println("\n Criar Contas\n");
 		
-		ContaCorrente cc1 = new ContaCorrente(contas.gerarNumero(), 123, 1, "Joao da Silva", 1000f, 100.0f);
+		ContaCorrente cc1 = new ContaCorrente(contas.gerarNumero(), 123, 1, "Joaõ da Silva", 1000f, 100.0f);
 		contas.cadastrar(cc1);
 		
 		ContaCorrente cc2 = new ContaCorrente(contas.gerarNumero(), 124, 1, "Maria da Silva", 2000f, 100.0f);
@@ -97,77 +95,139 @@ public class Menu {
 				
 				switch(tipo) {
 				case 1 -> {
-					System.out.println("Digite o Limite de crédito(R$): ");
+					System.out.println("Digite o Limite de Crédito (R$): ");
 					limite = leia.nextFloat();
 					contas.cadastrar(new ContaCorrente(contas.gerarNumero(), agencia, tipo, titular, saldo, limite));
 				}
 				case 2 -> {
-					System.out.println("Digite o dia do aniversariante da Conta: ");
+					System.out.println("Digite o dia do Aniversário da Conta: ");
 					aniversario = leia.nextInt();
 					contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), agencia, tipo, titular, saldo, aniversario));
 				}
 				}
 				
 				keyPress();
-				break;
-				
+				break;	
+
 			case 2:
-				System.out.println(Cores.TEXT_WHITE_BOLD + "Listar todas as Contas \n\n");
+				System.out.println(Cores.TEXT_WHITE + "Listar todas as Contas\n\n");
+				
 				contas.listarTodas();
-				
-				keyPress();
+
+                keyPress();
 				break;
-				
 			case 3:
-				System.out.println(Cores.TEXT_WHITE_BOLD + "Consultar dados da Conta - por número\n\n");
+				System.out.println(Cores.TEXT_WHITE + "Buscar Conta por número\n\n");
+
+				System.out.println("Digite o número da conta: ");
+				numero = leia.nextInt();
 				
-				keyPress();
+				contas.procurarPorNumero(numero);
+
+                keyPress();
 				break;
-				
 			case 4:
-				System.out.println(Cores.TEXT_WHITE_BOLD + "Atualizar dados da Conta\n\n");
+				System.out.println(Cores.TEXT_WHITE + "Atualizar dados da Conta\n\n");
 				
-				keyPress();
+				System.out.println("Digite o número da conta: ");
+				numero = leia.nextInt();
+				
+				if (contas.buscarNaCollection(numero) != null) {
+					
+					System.out.println("Digite o Numero da Agência: ");
+					agencia = leia.nextInt();
+					System.out.println("Digite o Nome do Titular: ");
+					leia.skip("\\R?");
+					titular = leia.nextLine();
+						
+					System.out.println("Digite o Saldo da Conta (R$): ");
+					saldo = leia.nextFloat();
+					
+					tipo = contas.retornaTipo(numero);
+					
+					switch(tipo) {
+						case 1 -> {
+							System.out.println("Digite o Limite de Crédito (R$): ");
+							limite = leia.nextFloat();
+							contas.atualizar(new ContaCorrente(numero, agencia, tipo, titular, saldo, limite));
+						}
+						case 2 -> {
+							System.out.println("Digite o dia do Aniversario da Conta: ");
+							aniversario = leia.nextInt();
+							contas.atualizar(new ContaPoupanca(numero, agencia, tipo, titular, saldo, aniversario));
+						}
+						default ->{
+							System.out.println("Tipo de conta inválido!");
+						}
+					}
+					
+				}else
+					System.out.println("\nConta não encontrada!");
+
+                keyPress();
 				break;
-				
 			case 5:
-				System.out.println(Cores.TEXT_WHITE_BOLD + "Apagar a Conta\n\n");
-				
-				keyPress();
+				System.out.println(Cores.TEXT_WHITE + "Apagar a Conta\n\n");
+	
+				System.out.println("Digite o número da conta: ");
+				numero = leia.nextInt();
+					
+				contas.deletar(numero);
+
+                keyPress();
 				break;
-				
 			case 6:
-				System.out.println(Cores.TEXT_WHITE_BOLD + "Saque\n\n");
-				
-				keyPress();
+				System.out.println(Cores.TEXT_WHITE + "Sacar\n\n");
+
+                keyPress();
 				break;
-				
 			case 7:
-				System.out.println(Cores.TEXT_WHITE_BOLD + "Depósito\n\n");
-				
+				System.out.println(Cores.TEXT_WHITE + "Depósito\n\n");
+
+				System.out.println("Digite o Numero da conta: ");
+				numero = leia.nextInt();
+
+				do {
+					System.out.println("Digite o Valor do Depósito (R$): ");
+					valor = leia.nextFloat();
+				} while (valor <= 0);
+
+				contas.depositar(numero, valor);
+
 				keyPress();
 				break;
-				
 			case 8:
-				System.out.println(Cores.TEXT_WHITE_BOLD + "Transferência entre Contas\n\n");
-				
+				System.out.println(Cores.TEXT_WHITE + "Transferência entre Contas\n\n");
+
+				System.out.println("Digite o Numero da Conta de Origem: ");
+				numero = leia.nextInt();
+				System.out.println("Digite o Numero da Conta de Destino: ");
+				numeroDestino = leia.nextInt();
+
+				do {
+					System.out.println("Digite o Valor da Transferência (R$): ");
+					valor = leia.nextFloat();
+				} while (valor <= 0);
+
+				contas.transferir(numero, numeroDestino, valor);
+
 				keyPress();
 				break;
-				
 			default:
-				System.out.println(Cores.TEXT_RED_BOLD+"\n Opção Inválida !\n");
-				
+				System.out.println(Cores.TEXT_RED_BOLD + "\nOpção Inválida!\n" + Cores.TEXT_RESET);
 				keyPress();
 				break;
-			}
+		}
+
 		}	
 	}
 	
 	public static void sobre() {
 		System.out.println("\n*********************************************************");
-		System.out.println("Projeto Desenvolvido por:Rafael Cabral  ");
+		System.out.println("Projeto Desenvolvido por: ");
 		System.out.println("Rafael Cabral - rafaelnc22@gmail.com");
 		System.out.println("https://github.com/Raafa22");
+		System.out.println("Em parceria com © Generation Brasil");
 		System.out.println("*********************************************************");
 	}
 	
@@ -180,4 +240,8 @@ public class Menu {
 		}
 	}
 }
+
+
+
+
 
